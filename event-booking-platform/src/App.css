@@ -1,0 +1,23 @@
+/* App.css */
+
+/* Navigation bar styles */
+.navbar {
+  display: flex;
+  justify-content: flex-start;
+  padding: 1rem;
+  background-color: #333;
+  color: white;
+}
+
+/* Styles for navigation links */
+.nav-link {
+  margin-right: 1rem;
+  text-decoration: none;
+  color: white;
+  font-weight: bold;
+}
+
+/* Hover effect for navigation links */
+.nav-link:hover {
+  text-decoration: underline;
+}
