@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import Card from "../components/card";
 import "../App.css";
 
 const Events = () => {
@@ -33,11 +34,7 @@ const Events = () => {
       <ul>
       {events.map(event => {
         return (
-          <div className="event-card">
-            <h2>Title: {event.title}</h2>
-            <div className="event-card-category">Category: {event.category}</div>
-            <div className="event-card-venue">Venue: {event.venue}</div>
-          </div>
+          <Card event={event}/>
         )
       })}
       </ul>
