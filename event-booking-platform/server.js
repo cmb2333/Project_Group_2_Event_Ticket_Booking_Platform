@@ -15,6 +15,25 @@ app.get('/', (req, res) => {
   res.send('Backend is running');
 });
 
+// Fetching all events
+app.get('/get-events', async (req, res) => {
+  try {
+    // Get all events in events table
+    const { rows } = await pool.query(
+      'SELECT * FROM events'
+    );
+
+    var jsonArray = JSON.stringify(rows);
+    res.json({
+      message: 'Get Events Successful',
+      events: jsonArray
+    });
+  } catch (error) {
+    console.error("Error fetching events");
+    res.status(500).json({ message: 'Server error' });
+  }
+})
+
 // User Sign up
 app.post('/register', async (req, res) => {
   const { name, email, password } = req.body;
