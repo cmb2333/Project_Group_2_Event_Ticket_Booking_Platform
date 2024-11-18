@@ -23,16 +23,16 @@ app.get('/get-events', async (req, res) => {
       'SELECT * FROM events'
     );
 
+    // Need to convert object to json string to send
     var jsonArray = JSON.stringify(rows);
     res.json({
-      message: 'Get Events Successful',
-      events: jsonArray
+      events: rows
     });
   } catch (error) {
     console.error("Error fetching events");
     res.status(500).json({ message: 'Server error' });
   }
-})
+});
 
 // User Sign up
 app.post('/register', async (req, res) => {

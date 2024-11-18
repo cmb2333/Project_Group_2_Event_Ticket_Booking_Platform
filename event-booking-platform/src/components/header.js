@@ -11,6 +11,7 @@ const Header = () => {
       <section id="left-corner">
         <Link to="/" className="nav-link">Home</Link>
         <Link to="/dashboard" className="nav-link">Dashboard</Link>
+        <Link to="/events" className="nav-link">Events</Link>
       </section>
         {user ? (
           // Show profile link when the user is logged in
