@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import "../App.css";
 
 const Events = () => {
   const [events, setEvents] = useState([]);
@@ -26,13 +27,17 @@ const Events = () => {
   }
 
   return (
-    <div>
+    <div className="event-page">
       <h1>Events</h1>
       {console.log(events)}
       <ul>
       {events.map(event => {
         return (
-          <li key={event.event_id}>{event.title}</li>
+          <div className="event-card">
+            <h2>Title: {event.title}</h2>
+            <div className="event-card-category">Category: {event.category}</div>
+            <div className="event-card-venue">Venue: {event.venue}</div>
+          </div>
         )
       })}
       </ul>

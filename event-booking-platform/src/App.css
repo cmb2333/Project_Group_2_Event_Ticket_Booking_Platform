@@ -136,3 +136,44 @@
 .login-signup-card button:hover {
   background-color: #0056b3;
 }
+
+/*---------------------------- Event page styles ----------------------------*/
+
+.event-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0;
+  height: 100vh;
+}
+
+.event-card {
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  padding: 20px;
+  padding-bottom: 20px;
+  text-align: center;
+  width: 30vh;
+  height: 15vh;
+  margin: 20px;
+}
+
+.event-card h2 {
+  font-size: 30px;
+  font-weight: bold;
+  margin: 10px 0;
+  text-align: left;
+}
+
+.event-card-category {
+  font-size: 20px;
+  margin: 10px 0;
+  text-align: left;
+}
+
+.event-card-venue {
+  font-size: 20px;
+  margin: 10px 0;
+  text-align: left;
+}
