@@ -1,23 +1,138 @@
 /* App.css */
 
-/* Navigation bar styles */
+/*-------------------------- Navigation bar styles --------------------------*/
 .navbar {
   display: flex;
-  justify-content: flex-start;
   padding: 1rem;
   background-color: #333;
   color: white;
+  justify-content: space-evenly;
+
 }
+
+#left-corner {
+  padding-right: 80%;
+}
+
 
 /* Styles for navigation links */
 .nav-link {
-  margin-right: 1rem;
   text-decoration: none;
   color: white;
   font-weight: bold;
+  padding: 5px;
 }
 
 /* Hover effect for navigation links */
 .nav-link:hover {
   text-decoration: underline;
+}
+
+/*-------------------------- Profile page styles --------------------------*/
+.profile-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; 
+  margin: 0;
+}
+
+.profile-card {
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  text-align: center;
+  width: 900px;
+  height: 700px;
+}
+
+.profile-card h1  {
+  font-size: 35px;
+  font-weight: bold;
+  margin: 10px 0;
+  padding-right: 40em; 
+}
+
+.profile-card p {
+  font-size: 20px;
+  color: #555;
+  margin-bottom: 20px;
+  padding-right: 30em;
+  text-align: left;
+}
+
+.profile-card button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 15px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s;
+  margin: 2em;
+}
+
+.profile-card button:hover {
+  background-color: #0056b3;
+}
+
+.password-change-form {
+  display: block;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/*-------------------------- Signin/Signup page styles --------------------------*/
+.login-signup-section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; 
+  margin: 0;
+}
+
+.login-signup-card {
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  padding-bottom: 100px;
+  text-align: center;
+  width: 500px;
+  height: 400px;
+}
+
+.login-card h2  {
+  font-size: 40px;
+  font-weight: bold;
+  margin: 10px 0;
+}
+
+.inputBox {
+  display: block;
+  width: 100%;
+  margin: 10px 0;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 1rem;
+  box-sizing: border-box;
+}
+
+.login-signup-card button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 15px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s;
+  margin: 2em;
+}
+
+.login-signup-card button:hover {
+  background-color: #0056b3;
 }
