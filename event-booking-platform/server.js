@@ -69,7 +69,6 @@ app.post('/login', async (req, res) => {
     if (result.rows.length === 0) {
       return res.status(401).json({ message: 'Invalid email or password' });
     }
-  
 
     const { user_id, name, email: user_email, password: hashedPassword } = result.rows[0];
 
@@ -157,8 +156,6 @@ app.put('/change-password', async (req, res) => {
     res.status(500).json({ message: 'Failed to update password.' });
   }
 });
-
-
 
 // Add event
 app.post('/events', async (req, res) => {

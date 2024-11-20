@@ -14,13 +14,15 @@
   padding-right: 80%;
 }
 
-
 /* Styles for navigation links */
 .nav-link {
   text-decoration: none;
   color: white;
   font-weight: bold;
   padding: 5px;
+  background: none;
+  border: none;
+  font: inherit;
 }
 
 /* Hover effect for navigation links */
@@ -155,7 +157,7 @@
   padding-bottom: 20px;
   text-align: center;
   width: 30vh;
-  height: 15vh;
+  height: 30vh;
   margin: 10px;
 }
 
@@ -186,7 +188,7 @@
   padding-bottom: 20px;
   text-align: center;
   width: 30vh;
-  height: 30vh;
+  height: 50dvh;
   margin: 10px;
 }
 

@@ -4,7 +4,7 @@ import { useUser } from "../context/UserContext";
 import '../App.css';
 
 const Header = () => {
-  const { user } = useUser(); 
+  const { user, logout } = useUser();
 
   return (
     <nav className="navbar">
@@ -14,11 +14,14 @@ const Header = () => {
         <Link to="/events" className="nav-link">Events</Link>
       </section>
         {user ? (
-          // Show profile link when the user is logged in
-          <Link to="/profile" className="nav-link">Profile</Link>
-        ) : (
-          // Show signup and signin links when the user is not logged in
           <>
+            {/* Show profile link and logout when the user is logged in */}
+            <Link to="/profile" className="nav-link">Profile</Link>
+            <button onClick={logout} className="nav-link logout-button">Logout</button> {/* Logout button */}
+          </>
+        ) : (
+          <>
+            {/* Show signup and signin links when the user is not logged in */}
             <Link to="/signup" className="nav-link">Sign-up</Link>
             <Link to="/signin" className="nav-link">Login</Link>
           </>
@@ -28,3 +31,4 @@ const Header = () => {
 };
 
 export default Header;
+

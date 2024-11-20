@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useUser } from '../context/UserContext';
 
-
 function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -23,16 +22,19 @@ function Login() {
       });
 
       const data = await response.json();
-      console.log('Login Response:', data);  // Log the response to see what it contains
-
+    
+      // Log response for debugging
+      console.log('Response Status:', response.status);
+      console.log('Response Data:', data);
 
       // Store user data for session
       if (response.ok) {
-        setMessage(data.message);
         setUser({ user_id: data.user_id, name: data.name, user_email: data.user_email });
-        navigate('/');
+        setMessage('Login successful!');
+        // Changed Redirect to dashboard
+        navigate('/dashboard'); 
       } else {
-        setMessage(data.message);
+        setMessage(data.message || 'Invalid email or password');
       }
     } catch (error) {
       setMessage('An error occurred. Please try again.');
@@ -40,15 +42,15 @@ function Login() {
   };
 
   return (
-    <div className='login-signup-section'>
-      <div className='login-signup-card'>
+    <div className="login-signup-section">
+      <div className="login-signup-card">
         <h2>Login</h2>
         <form onSubmit={handleLogin}>
           <label>
             Email:
-            <input 
-              className='inputBox'
-              type="text"
+            <input
+              className="inputBox"
+              type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
@@ -56,8 +58,8 @@ function Login() {
           </label>
           <label>
             Password:
-            <input 
-              className='inputBox'
+            <input
+              className="inputBox"
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
@@ -73,3 +75,4 @@ function Login() {
 }
 
 export default Login;
+
