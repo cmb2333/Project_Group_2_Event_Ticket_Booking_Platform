@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Card from "../components/card";
+import { Link } from "react-router-dom";
 import "../App.css";
 
 const Events = () => {
@@ -25,18 +26,23 @@ const Events = () => {
     } catch (error) {
       console.error(`Error getting events: ${error}`);
     }
-  }
+  };
 
   return (
     <div className="event-page">
       <h1>Events</h1>
-      {console.log(events)}
       <ul>
-      {events.map(event => {
-        return (
-          <Card event={event}/>
-        )
-      })}
+        {events.map(event => {
+          return (
+            <li key={event.event_id} className="event-item">
+              <Card event={event} />
+              {/* Button to navigate to seating chart */}
+              <Link to={`/seating-chart/${event.event_id}`} className="seating-chart-button">
+                View Seating Chart
+              </Link>
+            </li>
+          );
+        })}
       </ul>
     </div>
   );

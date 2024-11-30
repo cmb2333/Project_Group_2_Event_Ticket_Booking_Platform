@@ -1,7 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
-const pool = require('./src/db');
+const { pool } = require('./src/db');
 const bcrypt = require('bcrypt');
 
 const app = express();
@@ -18,21 +18,39 @@ app.get('/', (req, res) => {
 // Fetching all events
 app.get('/get-events', async (req, res) => {
   try {
-    // Get all events in events table
-    const { rows } = await pool.query(
-      'SELECT * FROM events'
-    );
-
-    // Need to convert object to json string to send
-    var jsonArray = JSON.stringify(rows);
+    // Get all events in the events table
+    const { rows } = await pool.query('SELECT * FROM events');
     res.json({
       events: rows
     });
   } catch (error) {
-    console.error("Error fetching events");
+    console.error('Error fetching events:', error);
     res.status(500).json({ message: 'Server error' });
   }
 });
+
+// Fetch specific event by event_id
+app.get('/events/:eventId', async (req, res) => {
+  const { eventId } = req.params;
+
+  try {
+    // Get the event details for given event_id
+    const { rows } = await pool.query(
+      'SELECT event_id, title, description, date, time, venue FROM events WHERE event_id = $1',
+      [eventId]
+    );
+
+    if (rows.length === 0) {
+      return res.status(404).json({ message: 'Event not found' });
+    }
+
+    res.json(rows[0]);
+  } catch (error) {
+    console.error('Error fetching event details:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
 
 // User Sign up
 app.post('/register', async (req, res) => {
@@ -171,6 +189,81 @@ app.post('/events', async (req, res) => {
   } catch (err) {
     console.error(err.message);
     res.status(500).send('Server error');
+  }
+});
+
+// Seating
+app.get('/seats/:eventId', async (req, res) => {
+  const { eventId } = req.params;
+
+  try {
+      const seats = await pool.query(
+          'SELECT id, label, category, price, status FROM seats WHERE event_id = $1',
+          [eventId]
+      );
+      res.status(200).json(seats.rows);
+  } catch (error) {
+      console.error('Error fetching seats:', error);
+      res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// book seats
+app.post('/book-seats', async (req, res) => {
+  const { userId, eventId, seats } = req.body;
+
+  if (!userId || !eventId || !Array.isArray(seats) || seats.length === 0) {
+      return res.status(400).json({ message: 'Invalid request data' });
+  }
+
+  try {
+      // Update seat statuses to 'booked'
+      const result = await pool.query(
+          'UPDATE seats SET status = $1 WHERE id = ANY($2::int[]) AND event_id = $3 RETURNING id',
+          ['booked', seats, eventId]
+      );
+
+      if (result.rowCount === 0) {
+          return res.status(404).json({ message: 'No seats were updated. Please check the seat IDs and event ID.' });
+      }
+
+      // Add event to the user's events array
+      await pool.query(
+          'UPDATE users SET events = array_append(events, $1) WHERE user_id = $2',
+          [eventId, userId]
+      );
+
+      res.status(200).json({ message: 'Seats booked successfully', updatedSeats: result.rows });
+  } catch (error) {
+      console.error('Error booking seats:', error);
+      res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// Events the user has booked
+app.get('/user/booked-events/:userId', async (req, res) => {
+  const { userId } = req.params;
+
+  try {
+      // Get event IDs from user's events column
+      const userResult = await pool.query('SELECT events FROM users WHERE user_id = $1', [userId]);
+
+      if (userResult.rows.length === 0 || !userResult.rows[0].events.length) {
+          return res.status(404).json({ message: 'No booked events found for this user.' });
+      }
+
+      const eventIds = userResult.rows[0].events;
+
+      // Fetch event details
+      const { rows } = await pool.query(
+          'SELECT event_id, title, description, date, time, venue FROM events WHERE event_id = ANY($1::int[])',
+          [eventIds]
+      );
+
+      res.json({ bookedEvents: rows });
+  } catch (error) {
+      console.error('Error fetching booked events:', error);
+      res.status(500).json({ message: 'Server error' });
   }
 });
 

@@ -17,7 +17,7 @@ const Header = () => {
           <>
             {/* Show profile link and logout when the user is logged in */}
             <Link to="/profile" className="nav-link">Profile</Link>
-            <button onClick={logout} className="nav-link logout-button">Logout</button> {/* Logout button */}
+            <button onClick={logout} className="nav-link logout-button">Logout</button>
           </>
         ) : (
           <>
