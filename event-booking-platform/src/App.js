@@ -13,6 +13,7 @@ import './App.css';
 import ProtectedRoute from './components/ProtectedRoute';
 import SeatingChart from './components/seatingChart';
 import ConfirmationPage from './pages/confirmation';
+import EventForm from './pages/eventForm';
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
           <Route path="/events" element={<Events />} />
           <Route path="/seating-chart/:eventId" element={<SeatingChart />} />
           <Route path="/confirmation" element={<ProtectedRoute><ConfirmationPage /></ProtectedRoute>} />
+          <Route path="/event-form" element={<ProtectedRoute><EventForm /></ProtectedRoute>} />
         </Routes>
         <Footer />
       </Router>

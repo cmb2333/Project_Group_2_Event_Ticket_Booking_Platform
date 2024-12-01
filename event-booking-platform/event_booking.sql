@@ -31,7 +31,7 @@ CREATE TABLE seats (
     price DECIMAL(10, 2) NOT NULL,
     status VARCHAR(20) NOT NULL DEFAULT 'available',
     event_id INT NOT NULL,
-    FOREIGN KEY (event_id) REFERENCES events(id) ON DELETE CASCADE
+    FOREIGN KEY (event_id) REFERENCES events(event_id) ON DELETE CASCADE
 );
 
 INSERT INTO seats (label, category, price, status, event_id)
