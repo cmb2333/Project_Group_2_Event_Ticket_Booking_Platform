@@ -5,6 +5,7 @@ import "../App.css";
 
 const Events = () => {
   const [events, setEvents] = useState([]);
+  const [searchVal, setSearchVal] = useState("");
 
   useEffect(() => {
     fetchEvents();
@@ -28,9 +29,56 @@ const Events = () => {
     }
   };
 
+  const handleSearch = async (e) => {
+    e.preventDefault();
+    let response;
+    try {
+      if (searchVal !== "") {
+        response = await fetch(`http://localhost:3001/events/${searchVal}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json"
+          },
+        });
+      } else {
+        response = await fetch("http://localhost:3001/get-events", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json"
+          },
+        });
+      } 
+
+      if (response.ok) {
+        const fetchedEvents = await response.json();
+        setEvents(fetchedEvents.events);
+      }
+    } catch (error) {
+      console.error(`Error getting events: ${error}`)
+    }
+  };
+
   return (
     <div className="event-page">
       <h1>Events</h1>
+        <form onSubmit={(e) => handleSearch(e)}>
+          <div className="search-box">
+            <label htmlFor="searchBox">
+              Category:
+            </label> 
+            <input
+              name="searchBox"
+              className="inputBox"
+              type="text"
+              value={searchVal}
+              onChange={(e) => setSearchVal(e.target.value)}
+            />
+            <button type="submit">Search</button>
+          </div>
+        </form>
+      {events.length === 0 ? (
+        <p>No Events</p>
+      ) : (
       <ul>
         {events.map(event => {
           return (
@@ -43,7 +91,7 @@ const Events = () => {
             </li>
           );
         })}
-      </ul>
+      </ul>)}
     </div>
   );
 };

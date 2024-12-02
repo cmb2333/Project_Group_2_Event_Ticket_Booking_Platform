@@ -24,8 +24,28 @@ app.get('/get-events', async (req, res) => {
       events: rows
     });
   } catch (error) {
-    console.error('Error fetching events:', error);
+    console.error('Error fetching events: ', error);
     res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// Filtering events
+app.get('/events/:searchVal', async (req, res) => {
+  const {searchVal} = req.params;
+  console.log(`Category: ${searchVal}`);
+
+  try {
+    const { rows } = await pool.query(
+      'SELECT * FROM events WHERE category = $1',
+      [searchVal]
+    );
+    
+    res.json({
+      events: rows
+    });
+  } catch (error) {
+    console.error('Error filter events: ', error);
+    res.status(500).json({ message: 'Server Error' });
   }
 });
 
