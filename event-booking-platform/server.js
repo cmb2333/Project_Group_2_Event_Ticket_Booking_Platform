@@ -46,7 +46,7 @@ app.get('/get-events/:filters', async (req, res) => {
     venue = null;
   }
 
-  if (price === 0) {
+  if (price === 0 || price === "") {
     price = null;
   }
   console.log(`Filters: ${category}, ${venue}, ${price}`);
