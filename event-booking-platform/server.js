@@ -292,7 +292,7 @@ app.get('/user/booked-events/:userId', async (req, res) => {
 
       // Fetch event details
       const { rows } = await pool.query(
-          'SELECT event_id, title, description, date, time, venue FROM events WHERE event_id = ANY($1::int[])',
+          'SELECT * FROM events WHERE event_id = ANY($1::int[])',
           [eventIds]
       );
 
