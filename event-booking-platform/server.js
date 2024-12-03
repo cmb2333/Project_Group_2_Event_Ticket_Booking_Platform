@@ -79,6 +79,46 @@ app.post('/create-event', async (req, res) => {
   }
 });
 
+// Update an Event
+app.put('/events/:eventId', async (req, res) => {
+  const { eventId } = req.params;
+  const { title, description, date, time, venue, category, price } = req.body;
+
+  if (!title || !description || !date || !time || !venue || !category || price == null) {
+      return res.status(400).json({ message: 'All fields are required' });
+  }
+
+  try {
+      const result = await pool.query(
+          'UPDATE events SET title = $1, description = $2, date = $3, time = $4, venue = $5, category = $6, price = $7 WHERE event_id = $8 RETURNING *',
+          [title, description, date, time, venue, category, price, eventId]
+      );
+      res.status(200).json(result.rows[0]);
+  } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Error updating event' });
+  }
+});
+
+// Delete an Event
+app.delete('/events/:eventId', async (req, res) => {
+  const { eventId } = req.params;
+
+  try {
+      const result = await pool.query(
+          'DELETE FROM events WHERE event_id = $1 RETURNING *',
+          [eventId]
+      );
+      if (result.rowCount === 0) {
+          return res.status(404).json({ message: 'Event not found' });
+      }
+      res.status(200).json({ message: 'Event deleted successfully' });
+  } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Error deleting event' });
+  }
+});
+
 
 // User Sign up
 app.post('/register', async (req, res) => {
@@ -268,7 +308,7 @@ app.get('/user/booked-events/:userId', async (req, res) => {
 
       // Fetch event details
       const { rows } = await pool.query(
-          'SELECT event_id, title, description, date, time, venue FROM events WHERE event_id = ANY($1::int[])',
+          'SELECT event_id, title, description, date, time, venue, category, price FROM events WHERE event_id = ANY($1::int[])',
           [eventIds]
       );
 
@@ -286,7 +326,7 @@ app.get('/user/hosted-events/:userId', async (req, res) => {
   try {
       // Fetch events where the user is the creator
       const { rows } = await pool.query(
-          'SELECT event_id, title, description, date, time, venue FROM events WHERE created_by = $1',
+          'SELECT event_id, title, description, date, time, venue, category, price FROM events WHERE created_by = $1',
           [userId]
       );
 

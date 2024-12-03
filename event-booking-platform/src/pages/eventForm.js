@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
 import { useUser } from '../context/UserContext';
+import { useNavigate } from "react-router-dom";
+
 
 const EventForm = () => {
   const { user } = useUser();
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     title: '',
     description: '',
@@ -44,6 +47,7 @@ const EventForm = () => {
       if (response.ok) {
         setSuccess('Event created successfully');
         setError('');
+        navigate("/dashboard"); // Redirect to the dashboard
       } else {
         setError(data.message || 'An error occurred while creating the event');
       }
