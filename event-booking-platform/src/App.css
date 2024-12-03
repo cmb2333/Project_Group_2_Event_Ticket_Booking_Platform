@@ -207,13 +207,34 @@
 .search-box {
   background: white;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   align-items: center;
-  padding: 20px;
+  padding: 10px;
   width: 50vh;
-  height: 5vh;
-  margin: 10px;
-  gap: 5px;
+  height: 20vh;
+  margin: 0px;
+}
+
+.search-box-row {
+  background: white;
+  display: flex;
+  flex-direction: column;
+  align-items: left;
+  width: 50vh;
+  height: 6.5vh;
+  margin: 0px;
+  
+}
+
+.search-input {
+  display: block;
+  width: 100%;
+  margin: 2px 0;
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 1rem;
+  box-sizing: border-box;
 }
 
 /*---------------------------- Seating --------------------------------------*/

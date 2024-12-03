@@ -5,7 +5,9 @@ import "../App.css";
 
 const Events = () => {
   const [events, setEvents] = useState([]);
-  const [searchVal, setSearchVal] = useState("");
+  const [categoryVal, setCategoryVal] = useState("");
+  const [venueVal, setVenueVal] = useState("");
+  const [priceVal, setPriceVal] = useState("");
 
   useEffect(() => {
     fetchEvents();
@@ -33,8 +35,13 @@ const Events = () => {
     e.preventDefault();
     let response;
     try {
-      if (searchVal !== "") {
-        response = await fetch(`http://localhost:3001/events/${searchVal}`, {
+      if (true) {
+        const filters = {
+          category: categoryVal,
+          venue: venueVal,
+          price: priceVal
+        };
+        response = await fetch(`http://localhost:3001/get-events/${JSON.stringify(filters)}`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json"
@@ -63,16 +70,43 @@ const Events = () => {
       <h1>Events</h1>
         <form onSubmit={(e) => handleSearch(e)}>
           <div className="search-box">
-            <label htmlFor="searchBox">
-              Category:
-            </label> 
-            <input
-              name="searchBox"
-              className="inputBox"
-              type="text"
-              value={searchVal}
-              onChange={(e) => setSearchVal(e.target.value)}
-            />
+            <div className="search-box-row">
+              <label htmlFor="categoryInput">
+                Category:
+              </label> 
+              <input
+                name="categoryInput"
+                className="search-input"
+                type="text"
+                value={categoryVal}
+                onChange={(e) => setCategoryVal(e.target.value)}
+              />
+            </div>
+            <div className="search-box-row">
+              <label htmlFor="venueInput">
+                Venue:
+              </label> 
+              <input
+                name="venueInput"
+                className="search-input"
+                type="text"
+                value={venueVal}
+                onChange={(e) => setVenueVal(e.target.value)}
+              />
+            </div>
+            <div className="search-box-row">
+              <label htmlFor="priceInput">
+                Price:
+              </label> 
+              <input
+                name="priceInput"
+                className="search-input"
+                type="number"
+                min="0"
+                value={priceVal}
+                onChange={(e) => setPriceVal(e.target.value)}
+              />
+            </div>
             <button type="submit">Search</button>
           </div>
         </form>
