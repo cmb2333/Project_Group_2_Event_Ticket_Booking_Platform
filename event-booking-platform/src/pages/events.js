@@ -6,6 +6,7 @@ import "../App.css";
 const Events = () => {
   const [events, setEvents] = useState([]);
 
+  
   useEffect(() => {
     fetchEvents();
   }, []);
@@ -31,19 +32,22 @@ const Events = () => {
   return (
     <div className="event-page">
       <h1>Events</h1>
-      <ul>
+      <Link to={`/event-form`} className="create-event-button">
+                Create Event
+      </Link>
+      <div className="event-list">
         {events.map(event => {
           return (
-            <li key={event.event_id} className="event-item">
+            <div key={event.event_id} className="event-item">
               <Card event={event} />
               {/* Button to navigate to seating chart */}
               <Link to={`/seating-chart/${event.event_id}`} className="seating-chart-button">
                 View Seating Chart
               </Link>
-            </li>
+            </div>
           );
         })}
-      </ul>
+      </div>
     </div>
   );
 };

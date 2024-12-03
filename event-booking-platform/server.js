@@ -51,6 +51,74 @@ app.get('/events/:eventId', async (req, res) => {
   }
 });
 
+// Create a new event
+app.post('/create-event', async (req, res) => {
+  const { title, description, date, time, venue, category, price, created_by } = req.body;
+
+  try {
+      // Check if all required fields are provided
+      if (!title || !date || !time || !venue || !category || !price || !created_by) {
+          return res.status(400).json({ message: 'All fields are required.' });
+      }
+
+      // Insert the event data into the database
+      const result = await pool.query(
+          `INSERT INTO events (title, description, date, time, venue, category, price, created_by)
+           VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *`,
+          [title, description, date, time, venue, category, price, created_by]
+      );
+
+      // Respond with the created event
+      res.status(201).json({
+          message: 'Event created successfully',
+          event: result.rows[0]
+      });
+  } catch (error) {
+      console.error('Error creating event:', error);
+      res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// Update an Event
+app.put('/events/:eventId', async (req, res) => {
+  const { eventId } = req.params;
+  const { title, description, date, time, venue, category, price } = req.body;
+
+  if (!title || !description || !date || !time || !venue || !category || price == null) {
+      return res.status(400).json({ message: 'All fields are required' });
+  }
+
+  try {
+      const result = await pool.query(
+          'UPDATE events SET title = $1, description = $2, date = $3, time = $4, venue = $5, category = $6, price = $7 WHERE event_id = $8 RETURNING *',
+          [title, description, date, time, venue, category, price, eventId]
+      );
+      res.status(200).json(result.rows[0]);
+  } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Error updating event' });
+  }
+});
+
+// Delete an Event
+app.delete('/events/:eventId', async (req, res) => {
+  const { eventId } = req.params;
+
+  try {
+      const result = await pool.query(
+          'DELETE FROM events WHERE event_id = $1 RETURNING *',
+          [eventId]
+      );
+      if (result.rowCount === 0) {
+          return res.status(404).json({ message: 'Event not found' });
+      }
+      res.status(200).json({ message: 'Event deleted successfully' });
+  } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Error deleting event' });
+  }
+});
+
 
 // User Sign up
 app.post('/register', async (req, res) => {
@@ -83,6 +151,7 @@ app.post('/login', async (req, res) => {
       'SELECT user_id, name, email, password FROM users WHERE email = $1',
       [email]
     );
+    
 
     if (result.rows.length === 0) {
       return res.status(401).json({ message: 'Invalid email or password' });
@@ -175,23 +244,6 @@ app.put('/change-password', async (req, res) => {
   }
 });
 
-// Add event
-app.post('/events', async (req, res) => {
-  const { title, description, date, time, venue, category, price, created_by } = req.body;
-
-  try {
-    const newEvent = await pool.query(
-      'INSERT INTO events (title, description, date, time, venue, category, price, created_by) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *',
-      [title, description, date, time, venue, category, price, created_by]
-    );
-
-    res.status(201).json(newEvent.rows[0]);
-  } catch (err) {
-    console.error(err.message);
-    res.status(500).send('Server error');
-  }
-});
-
 // Seating
 app.get('/seats/:eventId', async (req, res) => {
   const { eventId } = req.params;
@@ -256,13 +308,35 @@ app.get('/user/booked-events/:userId', async (req, res) => {
 
       // Fetch event details
       const { rows } = await pool.query(
-          'SELECT event_id, title, description, date, time, venue FROM events WHERE event_id = ANY($1::int[])',
+          'SELECT event_id, title, description, date, time, venue, category, price FROM events WHERE event_id = ANY($1::int[])',
           [eventIds]
       );
 
       res.json({ bookedEvents: rows });
   } catch (error) {
       console.error('Error fetching booked events:', error);
+      res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// Events the user is hosting
+app.get('/user/hosted-events/:userId', async (req, res) => {
+  const { userId } = req.params;
+
+  try {
+      // Fetch events where the user is the creator
+      const { rows } = await pool.query(
+          'SELECT event_id, title, description, date, time, venue, category, price FROM events WHERE created_by = $1',
+          [userId]
+      );
+
+      if (rows.length === 0) {
+          return res.status(404).json({ message: 'No hosted events found for this user.' });
+      }
+
+      res.json({ hostedEvents: rows });
+  } catch (error) {
+      console.error('Error fetching hosted events:', error);
       res.status(500).json({ message: 'Server error' });
   }
 });
