@@ -24,8 +24,44 @@ app.get('/get-events', async (req, res) => {
       events: rows
     });
   } catch (error) {
-    console.error('Error fetching events:', error);
+    console.error('Error fetching events: ', error);
     res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// Filtering events
+app.get('/get-events/:filters', async (req, res) => {
+  const filters = JSON.parse(req.params.filters);
+  console.log(filters);
+  let category = filters.category;
+  let venue = filters.venue;
+  let price = filters.price;
+  console.log(`Filters: ${category}, ${venue}, ${price}`);
+  
+  if (category === "") {
+    category = null;
+  }
+
+  if (venue === "") {
+    venue = null;
+  }
+
+  if (price === 0) {
+    price = null;
+  }
+  console.log(`Filters: ${category}, ${venue}, ${price}`);
+  try {
+    const { rows } = await pool.query(
+      'SELECT * FROM events WHERE category = COALESCE($1, category) AND venue = COALESCE($2, venue) AND price = COALESCE($3, price)',
+      [category, venue, price]
+    );
+    console.log(rows);
+    res.json({
+      events: rows
+    });
+  } catch (error) {
+    console.error('Error filter events: ', error);
+    res.status(500).json({ message: 'Server Error' });
   }
 });
 

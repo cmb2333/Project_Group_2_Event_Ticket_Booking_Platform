@@ -14,7 +14,7 @@ const Card = (props) => {
       <div className="event-card-venue">Venue: {props.event.venue}</div>
       {open && (
         <div className="event-card-details">
-        <p>Price: {props.event.price}</p>
+        <p>Price: ${props.event.price}</p>
         <p>Date: {props.event.date}</p>
         <p>Time: {props.event.time}</p>
         <p>Description: {props.event.description}</p>
