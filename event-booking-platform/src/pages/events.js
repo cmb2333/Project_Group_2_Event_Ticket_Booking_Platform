@@ -47,13 +47,6 @@ const Events = () => {
             "Content-Type": "application/json"
           },
         });
-      } else {
-        response = await fetch("http://localhost:3001/get-events", {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json"
-          },
-        });
       } 
 
       if (response.ok) {
@@ -68,6 +61,10 @@ const Events = () => {
   return (
     <div className="event-page">
       <h1>Events</h1>
+      <Link to={`/event-form`} className="create-event-button">
+                Create Event
+      </Link>
+      <div className="event-list">
         <form onSubmit={(e) => handleSearch(e)}>
           <div className="search-box">
             <div className="search-box-row">
@@ -116,16 +113,17 @@ const Events = () => {
       <ul>
         {events.map(event => {
           return (
-            <li key={event.event_id} className="event-item">
+            <div key={event.event_id} className="event-item">
               <Card event={event} />
               {/* Button to navigate to seating chart */}
               <Link to={`/seating-chart/${event.event_id}`} className="seating-chart-button">
                 View Seating Chart
               </Link>
-            </li>
+            </div>
           );
         })}
       </ul>)}
+      </div>
     </div>
   );
 };
